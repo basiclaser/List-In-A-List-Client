@@ -1,6 +1,8 @@
-import React, {useState, useEffect} from "react"
+import React, {useState,  useEffect, useContext} from "react"
+import {AppContext} from "../Context/AppContext"
 
 export default function ListForm() {
+    const {create} = useContext(AppContext)
     const [formState, setFormState] = useState({
         title:"",
         content:""
@@ -11,21 +13,7 @@ export default function ListForm() {
     }, [formState])
 
     const handleSubmit = (event) => {
-        event.preventDefault()
-        fetch('http://localhost:4000/api/posts', {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({...formState})
-            })
-            .then(res=>res.json())
-            .then(console.log)
-            // .then(res=>console.log(res))
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+        create(event, formState)
     }
     const handleChange = (event) => {
         event.persist()

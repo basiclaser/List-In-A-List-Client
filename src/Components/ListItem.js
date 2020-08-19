@@ -1,22 +1,20 @@
-import React, {useState} from "react"
+import React, {useState, useContext} from "react"
+import {AppContext} from "../Context/AppContext"
 
 function PostDeleteButton({_id}) {
+    const {kill} = useContext(AppContext)
     function handleClick() {
-        if(window.confirm("Are you sure you want to delete this?")) {
-            fetch('http://localhost:4000/api/posts/'+_id, {
-                method: 'delete'
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+        if(window.confirm("Are you sure you want to kill this?")) {
+            kill(_id)
         }
     }
     return (
-        <button onClick={handleClick}>delete</button>
+        <button onClick={handleClick}>kill</button>
     )
 }
 
 export default function ListItem({item}) {
+    const {update} = useContext(AppContext)
     const [title, setTitle] = useState(item.title)
     const [isEditing, setIsEditing] = useState(false)
     const handleChange = (event) => {
@@ -30,19 +28,8 @@ export default function ListItem({item}) {
     }
     const handleKeyPress = (event) => {
         if(event.key === "Enter") {
-            saveChanges()
+            update(item._id, title)
         }
-    }
-    const saveChanges = () => {
-        fetch(`http://localhost:4000/api/posts/${item._id}`,
-        {
-            method: "put",
-            headers: {
-                'Accept': 'application/json, text/plain, */*',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({title})
-        })
     }
     return (
         <div className="listItem">

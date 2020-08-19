@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import ListItem from "./ListItem"
+import {AppContext} from "../Context/AppContext"
 
 export default function List() {
-    const [list, setList] = useState()
-    useEffect(()=>{
-        fetch("http://localhost:4000/api/posts")
-            .then(res => res.json())
-            .then(res => setList(res))
-    },[])
+
+    const {list, setList, sayHello} = useContext(AppContext)
+
     return (
         <div className="posts-list">
             {list ? (
